@@ -274,7 +274,7 @@ class MainCar(Car):
 
 
 def start():
-    global car,obstacle
+    global car,obstacle,clock,images
     
 
     pygame.init()
@@ -290,28 +290,28 @@ def start():
 
 
 
-    def observe():
+def observe():
+    
+    clock.tick(FPS)
+    
+    draw(WINDOW, images, car)
+
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            run = False
+            break
+
+    keys = pygame.key.get_pressed()
+    moved = False
+
+    if keys[pygame.K_a]:
+        car.rotate(left=True)
         
-        clock.tick(FPS)
+    if keys[pygame.K_d]:
+        car.rotate(right=True)
         
-        draw(WINDOW, images, car)
-
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                run = False
-                break
-
-        keys = pygame.key.get_pressed()
-        moved = False
-
-        if keys[pygame.K_a]:
-            car.rotate(left=True)
-            
-        if keys[pygame.K_d]:
-            car.rotate(right=True)
-            
-        if keys[pygame.K_w]:
-            car.move_forward()
+    if keys[pygame.K_w]:
+        car.move_forward()
 
         
             
