@@ -334,11 +334,11 @@ def env_step(action):
         if event.type == pygame.QUIT:
             run = False
             break
-    if action == -1:
-        car.rotate(left=True)
     if action == 0:
-        car.rotate(right=True)
+        car.rotate(left=True)
     if action == 1:
+        car.rotate(right=True)
+    if action == 2:
         car.move()
 
     car.check_collision()
@@ -355,4 +355,11 @@ def env_step(action):
     return_data = (car.get_data(), reward, done,info)
     return return_data
 
+class Car_Sim_with_GUI:
+    def start():
+        env_start
+    def step(action):
+        env_step(action)
+    def observe():
+        env_observe()
 #env_start()
