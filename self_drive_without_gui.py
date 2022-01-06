@@ -58,7 +58,7 @@ class Car:
             }
         self.dist_goal = 0
         self.goal_angle = 0
-        self.rays_show = True
+        self.rays_show = False
         self.pre_cord = self.START_POS
         self.goal_reached = False
         self.pre_goal_dist = 0 
@@ -86,8 +86,8 @@ class Car:
         vertical = math.cos(radians) * self.speed
         horizontal = math.sin(radians) * self.speed
         #print("moving")
-        self.y -= vertical
-        self.x -= horizontal
+        self.y += vertical
+        self.x += horizontal
         
         
     
@@ -149,6 +149,42 @@ class Car:
                                 closest_line = length
                                 self.rays[id]["ob_x"] = x
                                 self.rays[id]["ob_y"] = y1
+        for index in obstacle.goal:
+            cords = obstacle.goal[index]
+            #print(cords)
+            lines = []
+            line1 = [cords[0],cords[1],cords[2],cords[1]]
+            line2 = [cords[2],cords[1],cords[2],cords[3]]
+            line3 = [cords[0],cords[3],cords[2],cords[3]]
+            line4 = [cords[0],cords[1],cords[0],cords[3]]
+            lines.append(line1)
+            lines.append(line2)
+            lines.append(line3)
+            lines.append(line4)
+            
+            for line in lines:
+                x1, y1, x2, y2 = line
+                if x1 == x2:
+                    y = slope*x1+c
+                    if y > y1 and y < y2:
+                        if self.check_if_ray_is_infront_of_car(x1,y):
+                            length = math.sqrt(((x1-self.center_x)**2)+((y-self.center_y)**2))
+                            if length < closest_line:
+                                closest_line = length
+                                self.rays[id]["ob_x"] = x1
+                                self.rays[id]["ob_y"] = y
+                            
+                if y1==y2:
+                    x = (y1-c) / slope
+                    if x > x1 and x < x2:
+                        if self.check_if_ray_is_infront_of_car(x,y1):
+                            length = math.sqrt(((x - self.center_x)**2)+((y1 - self.center_y)**2))
+                            if length < closest_line:
+                                closest_line = length
+                                self.rays[id]["ob_x"] = x
+                                self.rays[id]["ob_y"] = y1
+        
+    
         
     def draw_rays(self):
         
@@ -270,22 +306,23 @@ class Car:
         return self.is_alive
     
     def get_reward(self):
-        self.reward = 0
+        self.reward = 1
         if self.goal_reached: self.is_alive = False; return 10000 #if goal reached big reward
-        self.reward -= 1 # penalty for every step to reduce time
+        if self.is_alive == False: self.reward -= 1
+        self.reward -= 0.01 # penalty for every step to reduce time
         if self.pre_goal_dist > self.dist_goal: #if closer big reward
-            self.reward += 5
+            self.reward += 0.001
         if self.pre_goal_dist <= self.dist_goal:   #if further negitive reward
-            self.reward -= 5
+            self.reward -= 0.1
         if (self.center_x,self.center_y) in self.pre_pos: 
-            self.reward -= 0.05
+            self.reward -= 0.1
         self.pre_goal_dist = self.dist_goal
         self.pre_pos.append((self.center_x,self.center_y))
         return self.reward
     
     def update(self):
         #print(self.center_x,self.center_y)
-        #self.move()
+        self.move()
         pass
     
         

@@ -166,6 +166,40 @@ class Car:
                                 self.rays[id]["ob_x"] = x
                                 self.rays[id]["ob_y"] = y1
         
+        cords = obstacle.border
+        #print(cords)       [0,0,1500,1500]
+        lines = []
+        line1 = [cords[0],cords[1],cords[2],cords[1]]
+        line2 = [cords[2],cords[1],cords[2],cords[3]]
+        line3 = [cords[0],cords[3],cords[2],cords[3]]
+        line4 = [cords[0],cords[1],cords[0],cords[3]]
+        lines.append(line1)
+        lines.append(line2)
+        lines.append(line3)
+        lines.append(line4)
+        
+        
+        for line in lines:
+            x1, y1, x2, y2 = line
+            if x1 == x2:
+                y = slope*x1+c
+                if y < y1 or y > y2:
+                    if self.check_if_ray_is_infront_of_car(x1,y):
+                        length = math.sqrt(((x1-self.center_x)**2)+((y-self.center_y)**2))
+                        #if length < closest_line:
+                        closest_line = length
+                        self.rays[id]["ob_x"] = x1
+                        self.rays[id]["ob_y"] = y
+                        
+            if y1==y2:
+                x = (y1-c) / slope
+                if x < x1 or x > x2:
+                    if self.check_if_ray_is_infront_of_car(x,y1):
+                        length = math.sqrt(((x - self.center_x)**2)+((y1 - self.center_y)**2))
+                       # if length < closest_line:
+                        closest_line = length
+                        self.rays[id]["ob_x"] = x
+                        self.rays[id]["ob_y"] = y1
     def draw_rays(self):
         
         self.rays[1]["angle"] = self.angle+120
@@ -291,11 +325,11 @@ class Car:
         if self.is_alive == False: self.reward -= 1
         self.reward -= 0.01 # penalty for every step to reduce time
         if self.pre_goal_dist > self.dist_goal: #if closer big reward
-            self.reward += 0.05
+            self.reward += 0.001
         if self.pre_goal_dist <= self.dist_goal:   #if further negitive reward
-            self.reward -= 0.05
+            self.reward -= 0.1
         if (self.center_x,self.center_y) in self.pre_pos: 
-            self.reward -= 0.05
+            self.reward -= 0.1
         self.pre_goal_dist = self.dist_goal
         self.pre_pos.append((self.center_x,self.center_y))
         return self.reward
