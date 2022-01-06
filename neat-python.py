@@ -5,7 +5,7 @@ import pickle
 
 import neat
 from self_drive_without_gui import *
-
+from statistics import mean
 
 runs_per_net = 5
 steps = 2000
@@ -22,8 +22,9 @@ def eval_genome(genome, config):
         env_start()
        
         fitness = 0.0
+        obs = env_observe()
         for step in range(steps):
-            inputs = env_observe()
+            inputs = obs
             action = net.activate(inputs)
             action = action.index(max(action))
 
@@ -37,8 +38,8 @@ def eval_genome(genome, config):
         fitnesses.append(fitness)
 
     # The genome's fitness is its worst performance across all runs.
-    print(min(fitnesses))
-    return min(fitnesses)
+    print(max(fitnesses))
+    return mean(fitnesses)
 
 
 def eval_genomes(genomes, config):

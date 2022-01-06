@@ -79,6 +79,7 @@ class Car:
         self.goal_reached = False
         self.pre_goal_dist = 0 
         self.reward = 0
+        self.pre_pos = []
     
     def draw(self, WINDOW):
         self.draw_rays()
@@ -251,7 +252,7 @@ class Car:
                 break
             x_range = range(obstacle.border[0],obstacle.border[2])
             y_range = range(obstacle.border[1],obstacle.border[3])
-            if int(points[0]) not in x_range and int(points[1]) not in y_range:
+            if int(points[0]) not in x_range or int(points[1]) not in y_range:
                 print("outside border")
                 self.is_alive = False
                 break
@@ -277,7 +278,7 @@ class Car:
         for i in range(1,4):
             values[i] = int(self.rays[i]["length"]/30)
         values[4] = self.goal_angle
-        values[5] = self.dist_goal
+        values[5] = self.angle
         #print(values)
         return values
     
@@ -285,15 +286,18 @@ class Car:
         return self.is_alive
     
     def get_reward(self):
-        self.reward = 0
+        self.reward = 1
         if self.goal_reached: self.is_alive = False; return 10000 #if goal reached big reward
-        self.reward -= 1 # penalty for every step to reduce time
+        if self.is_alive == False: self.reward -= 1
+        self.reward -= 0.01 # penalty for every step to reduce time
         if self.pre_goal_dist > self.dist_goal: #if closer big reward
-            self.reward += 5
-        if self.pre_goal_dist < self.dist_goal:   #if further negitive reward
-            #self.reward -= 5
-            pass
+            self.reward += 0.05
+        if self.pre_goal_dist <= self.dist_goal:   #if further negitive reward
+            self.reward -= 0.05
+        if (self.center_x,self.center_y) in self.pre_pos: 
+            self.reward -= 0.05
         self.pre_goal_dist = self.dist_goal
+        self.pre_pos.append((self.center_x,self.center_y))
         return self.reward
     
     def update(self):
@@ -338,8 +342,7 @@ def env_step(action):
         car.rotate(left=True)
     if action == 1:
         car.rotate(right=True)
-    if action == 2:
-        car.move()
+    car.move()
 
     car.check_collision()
     car.find_goal_angle_and_distance()

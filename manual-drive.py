@@ -12,8 +12,7 @@ def basic_policy(obs):
     if keys[pygame.K_d]:
         action = 1
         
-    if keys[pygame.K_w]:
-        action = 2
+    
     
     return action
 

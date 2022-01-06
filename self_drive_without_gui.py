@@ -63,6 +63,7 @@ class Car:
         self.goal_reached = False
         self.pre_goal_dist = 0 
         self.reward = 0
+        self.pre_pos = []
     
     def draw(self, WINDOW):
         self.draw_rays()
@@ -261,7 +262,7 @@ class Car:
         for i in range(1,4):
             values[i] = int(self.rays[i]["length"]/30)
         values[4] = self.goal_angle
-        values[5] = self.dist_goal
+        
         #print(values)
         return values
     
@@ -274,10 +275,12 @@ class Car:
         self.reward -= 1 # penalty for every step to reduce time
         if self.pre_goal_dist > self.dist_goal: #if closer big reward
             self.reward += 5
-        if self.pre_goal_dist < self.dist_goal:   #if further negitive reward
-            #self.reward -= 5
-            pass
+        if self.pre_goal_dist <= self.dist_goal:   #if further negitive reward
+            self.reward -= 5
+        if (self.center_x,self.center_y) in self.pre_pos: 
+            self.reward -= 0.05
         self.pre_goal_dist = self.dist_goal
+        self.pre_pos.append((self.center_x,self.center_y))
         return self.reward
     
     def update(self):
@@ -308,17 +311,11 @@ def env_observe():
     return car.get_data()
 
 def env_step(action):
-    
-        
-    
-
-    
-    if action == -1:
-        car.rotate(left=True)
     if action == 0:
         car.rotate(right=True)
     if action == 1:
-        car.move()
+        car.rotate(left=True)
+    car.move()
 
     car.check_collision()
     car.find_goal_angle_and_distance()
