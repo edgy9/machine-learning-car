@@ -146,6 +146,7 @@ class Car:
             
             for line in lines:
                 x1, y1, x2, y2 = line
+                 
                 if x1 == x2:
                     y = slope*x1+c
                     if y > y1 and y < y2:
@@ -155,7 +156,8 @@ class Car:
                                 closest_line = length
                                 self.rays[id]["ob_x"] = x1
                                 self.rays[id]["ob_y"] = y
-                            
+                                self.rays[id]["length"] = closest_line
+
                 if y1==y2:
                     x = (y1-c) / slope
                     if x > x1 and x < x2:
@@ -165,8 +167,10 @@ class Car:
                                 closest_line = length
                                 self.rays[id]["ob_x"] = x
                                 self.rays[id]["ob_y"] = y1
+                                self.rays[id]["length"] = closest_line
         
         cords = obstacle.border
+        closest_line = 1000
         #print(cords)       [0,0,1500,1500]
         lines = []
         line1 = [cords[0],cords[1],cords[2],cords[1]]
@@ -186,20 +190,18 @@ class Car:
                 if y < y1 or y > y2:
                     if self.check_if_ray_is_infront_of_car(x1,y):
                         length = math.sqrt(((x1-self.center_x)**2)+((y-self.center_y)**2))
-                        #if length < closest_line:
-                        closest_line = length
-                        self.rays[id]["ob_x"] = x1
-                        self.rays[id]["ob_y"] = y
+                        
+                        #self.rays[id]["ob_x"] = x1
+                        #self.rays[id]["ob_y"] = y
                         
             if y1==y2:
                 x = (y1-c) / slope
                 if x < x1 or x > x2:
                     if self.check_if_ray_is_infront_of_car(x,y1):
                         length = math.sqrt(((x - self.center_x)**2)+((y1 - self.center_y)**2))
-                       # if length < closest_line:
-                        closest_line = length
-                        self.rays[id]["ob_x"] = x
-                        self.rays[id]["ob_y"] = y1
+                       
+                        #self.rays[id]["ob_x"] = x
+                        #self.rays[id]["ob_y"] = y1
     def draw_rays(self):
         
         self.rays[1]["angle"] = self.angle+120
@@ -310,10 +312,11 @@ class Car:
     def get_data(self):
         values = [0, 0, 0, 0, 0, 0]
         for i in range(1,4):
-            values[i] = int(self.rays[i]["length"]/30)
+            values[i] = int(self.rays[i]["length"])
+        values[0] = int(self.rays[0]["length"])
         values[4] = self.goal_angle
         values[5] = self.angle
-        #print(values)
+        print(values)
         return values
     
     def check_alive(self):
