@@ -1,17 +1,22 @@
 import random
-from self_drive3 import *
+from self_drive_without_gui import *
 import numpy as np
 import pygame
 
+pygame.init() 
+
 def basic_policy(obs):
     keys = pygame.key.get_pressed()
-    action = 2
+    action = 3
+    if keys[pygame.K_w]:
+        action = 2
     if keys[pygame.K_a]:
         action = 0
         
     if keys[pygame.K_d]:
         action = 1
-        
+    
+    
     
     
     return action
@@ -25,7 +30,7 @@ for episode in range(10):
         action = basic_policy(obs)
         
         obs, reward, done, info = env_step(action)
-        print(reward)
+        #(reward)
         episode_rewards += reward
         if done:
             break

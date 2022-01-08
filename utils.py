@@ -21,24 +21,34 @@ def blit_rotate_center(window, image, top_left, angle, self, obstacle):
     self.four_points = [left_top, right_top, left_bottom, right_bottom]
     #pygame.draw.lines(window,(0,0,255),True,self.four_points,3)
     if self.rays_show:
-        pygame.draw.line(window,(0,255,255),(self.center_x,self.center_y),((self.center_x + self.rays[1]["horizontal"]),(self.center_y + self.rays[1]["vertical"])),3)
-        pygame.draw.line(window,(0,255,255),(self.center_x,self.center_y),((self.center_x + self.rays[2]["horizontal"]),(self.center_y + self.rays[2]["vertical"])),3)
-        pygame.draw.line(window,(0,255,255),(self.center_x,self.center_y),((self.center_x + self.rays[3]["horizontal"]),(self.center_y + self.rays[3]["vertical"])),3)
-        pygame.draw.line(window,(0,255,255),(self.center_x,self.center_y),((self.center_x + self.rays[4]["horizontal"]),(self.center_y + self.rays[4]["vertical"])),3)
+        
+        
+        
+        
 
         pygame.draw.line(window,(255,0,255),(self.center_x,self.center_y),((obstacle.goal_rect[0]+(obstacle.goal_rect[2]/2)),(obstacle.goal_rect[1]+(obstacle.goal_rect[3]/2))),3)
 
         if (self.rays[1]["ob_x"]) != 0:
             pygame.draw.circle(window,(255,0,0),((self.rays[1]["ob_x"]),(self.rays[1]["ob_y"])),5)
             pygame.draw.line(window,(255,0,0),(self.center_x,self.center_y),((self.rays[1]["ob_x"]),(self.rays[1]["ob_y"])),3)
+        else:
+            pygame.draw.line(window,(0,255,255),(self.center_x,self.center_y),((self.center_x + self.rays[1]["horizontal"]),(self.center_y + self.rays[1]["vertical"])),3)
+
         if (self.rays[2]["ob_x"]) != 0:
             pygame.draw.circle(window,(255,0,0),((self.rays[2]["ob_x"]),(self.rays[2]["ob_y"])),5)
             pygame.draw.line(window,(255,0,0),(self.center_x,self.center_y),((self.rays[2]["ob_x"]),(self.rays[2]["ob_y"])),3)  
+        else:
+            pygame.draw.line(window,(0,255,255),(self.center_x,self.center_y),((self.center_x + self.rays[2]["horizontal"]),(self.center_y + self.rays[2]["vertical"])),3)
+
         if (self.rays[3]["ob_x"]) != 0:
             pygame.draw.circle(window,(255,0,0),((self.rays[3]["ob_x"]),(self.rays[3]["ob_y"])),5)
             pygame.draw.line(window,(255,0,0),(self.center_x,self.center_y),((self.rays[3]["ob_x"]),(self.rays[3]["ob_y"])),3)
+        else:
+            pygame.draw.line(window,(0,255,255),(self.center_x,self.center_y),((self.center_x + self.rays[3]["horizontal"]),(self.center_y + self.rays[3]["vertical"])),3)
         if (self.rays[4]["ob_x"]) != 0:
             pygame.draw.circle(window,(255,0,0),((self.rays[4]["ob_x"]),(self.rays[4]["ob_y"])),5)
             pygame.draw.line(window,(255,0,0),(self.center_x,self.center_y),((self.rays[4]["ob_x"]),(self.rays[4]["ob_y"])),3)
+        else:
+            pygame.draw.line(window,(0,255,255),(self.center_x,self.center_y),((self.center_x + self.rays[4]["horizontal"]),(self.center_y + self.rays[4]["vertical"])),3)
 
        
