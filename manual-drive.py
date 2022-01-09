@@ -1,5 +1,5 @@
 import random
-from self_drive_without_gui import *
+from self_drive3 import *
 import numpy as np
 import pygame
 
@@ -30,7 +30,7 @@ for episode in range(10):
         action = basic_policy(obs)
         
         obs, reward, done, info = env_step(action)
-        #(reward)
+        print(reward)
         episode_rewards += reward
         if done:
             break

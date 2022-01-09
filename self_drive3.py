@@ -66,7 +66,7 @@ class Obstacle:
 class Car:
     def __init__(self):
         
-        self.speed = 10
+        self.speed = 2
         self.angle = 270
         self.img = CAR
         self.START_POS = self.get_start_pos()
@@ -75,7 +75,7 @@ class Car:
         self.is_alive = True
         self.center_x = 0
         self.center_y = 0
-        self.turn_angle = 2
+        self.turn_angle = 1
         self.test_ray_len = 1000
         self.intersection = (0,0)
         self.four_points = []
@@ -330,9 +330,9 @@ class Car:
         values = [0, 0, 0, 0, 0, 0, 0]
         for i in range(0,4):
             values[i] = int(self.rays[i+1]["length"])
-        values[4] = self.goal_angle
+        values[4] = round(self.goal_angle)
         values[5] = self.angle
-        values[6] = self.dist_goal
+        values[6] = round(self.dist_goal)
         #print(values)
         return values
     
@@ -342,7 +342,8 @@ class Car:
     def get_reward(self):
         self.reward = 1
         if self.goal_reached: self.is_alive = False; return 10000 #if goal reached big reward
-        if self.is_alive == False: self.reward -= 1
+        if self.is_alive == False: return 0
+
         self.reward -= 0.1 # penalty for every step to reduce time
         if self.pre_goal_dist > self.dist_goal: #if closer big reward
             self.reward += 1
@@ -352,8 +353,9 @@ class Car:
             self.reward -= 5
         self.pre_goal_dist = self.dist_goal
         self.pre_pos.append((self.center_x,self.center_y))
-        if self.angle == self.goal_angle:
+        if self.angle == int(self.goal_angle):
             self.reward += 2
+        
         return self.reward
     
     def update(self):
@@ -404,16 +406,13 @@ def env_step(action):
 
     car.check_collision()
     car.find_goal_angle_and_distance()
-    if car.is_alive:
-        reward = car.get_reward()
-    else:
-        reward = 0
+    
     info = {}
-    #print(reward)
+    
     done = False
     if not car.is_alive:
         done = True
-    return_data = (car.get_data(), reward, done,info)
+    return_data = (car.get_data(), car.get_reward(), done,info)
     return return_data
 
 class Car_Sim_with_GUI:
