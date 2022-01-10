@@ -30,7 +30,7 @@ for episode in range(10):
         action = basic_policy(obs)
         
         obs, reward, done, info = env_step(action)
-        print(reward)
+        #print(reward)
         episode_rewards += reward
         if done:
             break

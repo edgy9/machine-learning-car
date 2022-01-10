@@ -47,8 +47,10 @@ def draw(WINDOW, car):
 class Obstacle:
     def __init__(self):
         w, h = pygame.display.get_surface().get_size()
-        self.obsticals = {1:[800,500,1200,800],2:[100,400,700,1000],3:[300,200,500,300]}
-        self.obsticals_rect = {1:[300,200,200,100],2:[800,500,400,300],3:[100,400,600,600]}
+        #self.obsticals = {1:[800,500,1200,800],2:[100,400,700,1000],3:[300,200,500,300]}
+        #self.obsticals_rect = {1:[300,200,200,100],2:[800,500,400,300],3:[100,400,600,600]}
+        self.obsticals = {}
+        self.obsticals_rect = {}
         self.border = [1,1,w-1,h-1]
         self.border_rect = [1,1,w-2,h-2]
         self.goal = [800,200,850,250]
@@ -57,9 +59,9 @@ class Obstacle:
     def draw(self,WINDOW):
         
         
-        pygame.draw.rect(WINDOW,(0,0,255),(self.obsticals_rect[1]),3)
-        pygame.draw.rect(WINDOW,(0,0,255),(self.obsticals_rect[2]),3)
-        pygame.draw.rect(WINDOW,(0,0,255),(self.obsticals_rect[3]),3)
+        #pygame.draw.rect(WINDOW,(0,0,255),(self.obsticals_rect[1]),3)
+        #pygame.draw.rect(WINDOW,(0,0,255),(self.obsticals_rect[2]),3)
+        #pygame.draw.rect(WINDOW,(0,0,255),(self.obsticals_rect[3]),3)
         pygame.draw.rect(WINDOW,(252, 186, 3),(self.goal_rect))
         pygame.draw.rect(WINDOW,(0,0,255),self.border,3)
         
@@ -296,6 +298,7 @@ class Car:
         
         self.dist_goal = length
         self.goal_angle = angle_to_car
+        
         #print(angle_to_car,length)
 
 
@@ -327,12 +330,12 @@ class Car:
         
 
     def get_data(self):
-        values = [0, 0, 0, 0, 0, 0, 0]
+        values = [0, 0, 0, 0, 0]
         for i in range(0,4):
             values[i] = int(self.rays[i+1]["length"])
         values[4] = round(self.goal_angle)
-        values[5] = self.angle
-        values[6] = round(self.dist_goal)
+        #values[5] = self.angle
+        #values[5] = round(self.dist_goal)
         #print(values)
         return values
     
@@ -340,21 +343,22 @@ class Car:
         return self.is_alive
     
     def get_reward(self):
-        self.reward = 1
+        self.reward = 0
         if self.goal_reached: self.is_alive = False; return 10000 #if goal reached big reward
         if self.is_alive == False: return 0
 
-        self.reward -= 0.1 # penalty for every step to reduce time
+        self.reward -= 1 # penalty for every step to reduce time
         if self.pre_goal_dist > self.dist_goal: #if closer big reward
-            self.reward += 1
+            self.reward += 100
         if self.pre_goal_dist <= self.dist_goal:   #if further negitive reward
-            self.reward -= 1
+            self.reward -= 10
         if (self.center_x,self.center_y) in self.pre_pos: 
-            self.reward -= 5
+            self.reward -= 20
         self.pre_goal_dist = self.dist_goal
         self.pre_pos.append((self.center_x,self.center_y))
-        if self.angle == int(self.goal_angle):
-            self.reward += 2
+        if int(self.goal_angle) == 0:
+            self.reward += 40
+        #print(self.angle,self.goal_angle)
         
         return self.reward
     

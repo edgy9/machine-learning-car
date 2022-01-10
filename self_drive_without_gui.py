@@ -293,12 +293,12 @@ class Car:
         
 
     def get_data(self):
-        values = [0, 0, 0, 0, 0, 0, 0]
+        values = [0, 0, 0, 0, 0, 0]
         for i in range(0,4):
             values[i] = int(self.rays[i+1]["length"])
         values[4] = round(self.goal_angle)
-        values[5] = self.angle
-        values[6] = round(self.dist_goal)
+        #values[5] = self.angle
+        values[5] = round(self.dist_goal)
         #print(values)
         return values
     
