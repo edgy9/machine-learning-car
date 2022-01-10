@@ -23,8 +23,10 @@ def draw(car):
 class Obstacle:
     def __init__(self):
         w, h = WIDTH, HEIGHT
-        self.obsticals = {1:[800,500,1200,800],2:[100,400,700,1000],3:[300,200,500,300]}
-        self.obsticals_rect = {1:[300,200,200,100],2:[800,500,400,300],3:[100,400,600,600]}
+        #self.obsticals = {1:[800,500,1200,800],2:[100,400,700,1000],3:[300,200,500,300]}
+        #self.obsticals_rect = {1:[300,200,200,100],2:[800,500,400,300],3:[100,400,600,600]}
+        self.obsticals = {}
+        self.obsticals_rect = {}
         self.border = [1,1,w-1,h-1]
         self.border_rect = [1,1,w-2,h-2]
         self.goal = [800,200,850,250]
@@ -293,12 +295,12 @@ class Car:
         
 
     def get_data(self):
-        values = [0, 0, 0, 0, 0, 0]
+        values = [0, 0, 0, 0, 0]
         for i in range(0,4):
             values[i] = int(self.rays[i+1]["length"])
         values[4] = round(self.goal_angle)
         #values[5] = self.angle
-        values[5] = round(self.dist_goal)
+        #values[5] = round(self.dist_goal)
         #print(values)
         return values
     
@@ -307,7 +309,7 @@ class Car:
     
     def get_reward(self):
         self.reward = 1
-        if self.goal_reached: self.is_alive = False; return 10000 #if goal reached big reward
+        if self.goal_reached: self.is_alive = False; return 1000000 #if goal reached big reward
         if self.is_alive == False: return 0
 
         self.reward -= 0.1 # penalty for every step to reduce time

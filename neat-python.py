@@ -4,7 +4,7 @@ import os
 import pickle
 
 import neat
-from self_drive3 import *
+from self_drive_without_gui import *
 from statistics import mean
 
 runs_per_net = 5
@@ -39,7 +39,7 @@ def eval_genome(genome, config):
 
     # The genome's fitness is its worst performance across all runs.
     #print(max(fitnesses))
-    return mean(fitnesses)
+    return max(fitnesses)
 
 
 def eval_genomes(genomes, config):
