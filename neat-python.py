@@ -4,7 +4,7 @@ import os
 import pickle
 
 import neat
-from self_drive_without_gui import *
+from self_drive3 import *
 from statistics import mean
 
 runs_per_net = 5

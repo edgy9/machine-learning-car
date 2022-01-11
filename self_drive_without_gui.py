@@ -309,6 +309,7 @@ class Car:
     
     def get_reward(self):
         self.reward = 1
+        self.check_collision()
         if self.goal_reached: self.is_alive = False; return 1000000 #if goal reached big reward
         if self.is_alive == False: return 0
 

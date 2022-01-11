@@ -317,7 +317,7 @@ class Car:
             y_range = range(obstacle.goal[1],obstacle.goal[3])
             if int(points[0]) in x_range and int(points[1]) in y_range: 
                 print("goal reached")
-                self.is_alive = False
+                #self.is_alive = False
                 self.goal_reached = True
                 break
             x_range = range(obstacle.border[0],obstacle.border[2])
@@ -344,7 +344,7 @@ class Car:
     
     def get_reward(self):
         self.reward = 0
-        if self.goal_reached: self.is_alive = False; return 10000 #if goal reached big reward
+        if self.goal_reached: return 10000 #if goal reached big reward
         if self.is_alive == False: return 0
 
         self.reward -= 1 # penalty for every step to reduce time

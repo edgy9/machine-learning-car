@@ -22,7 +22,7 @@ def basic_policy(obs):
     return action
 
 totals = []
-for episode in range(10):
+for episode in range(1):
     episode_rewards = 0
     env_start()
     obs = env_observe()
@@ -30,10 +30,10 @@ for episode in range(10):
         action = basic_policy(obs)
         
         obs, reward, done, info = env_step(action)
-        #print(reward)
-        episode_rewards += reward
+        print(reward)
+        #episode_rewards += reward
         if done:
             break
         
-    totals.append(episode_rewards)
-print(np.mean(totals), np.std(totals),np.min(totals),np.max(totals))
+    totals.append(reward)
+print(np.mean(totals), np.std(totals),np.min(totals),np.max(totals),max(totals))
