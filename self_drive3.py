@@ -47,10 +47,10 @@ def draw(WINDOW, car):
 class Obstacle:
     def __init__(self):
         w, h = pygame.display.get_surface().get_size()
-        #self.obsticals = {1:[800,500,1200,800],2:[100,400,700,1000],3:[300,200,500,300]}
-        #self.obsticals_rect = {1:[300,200,200,100],2:[800,500,400,300],3:[100,400,600,600]}
-        self.obsticals = {}
-        self.obsticals_rect = {}
+        self.obsticals = {1:[800,500,1200,800],2:[100,400,700,1000],3:[300,200,500,300]}
+        self.obsticals_rect = {1:[300,200,200,100],2:[800,500,400,300],3:[100,400,600,600]}
+        #self.obsticals = {}
+        #self.obsticals_rect = {}
         self.border = [1,1,w-1,h-1]
         self.border_rect = [1,1,w-2,h-2]
         self.goal = [800,200,850,250]
@@ -59,9 +59,9 @@ class Obstacle:
     def draw(self,WINDOW):
         
         
-        #pygame.draw.rect(WINDOW,(0,0,255),(self.obsticals_rect[1]),3)
-        #pygame.draw.rect(WINDOW,(0,0,255),(self.obsticals_rect[2]),3)
-        #pygame.draw.rect(WINDOW,(0,0,255),(self.obsticals_rect[3]),3)
+        pygame.draw.rect(WINDOW,(0,0,255),(self.obsticals_rect[1]),3)
+        pygame.draw.rect(WINDOW,(0,0,255),(self.obsticals_rect[2]),3)
+        pygame.draw.rect(WINDOW,(0,0,255),(self.obsticals_rect[3]),3)
         pygame.draw.rect(WINDOW,(252, 186, 3),(self.goal_rect))
         pygame.draw.rect(WINDOW,(0,0,255),self.border,3)
         
@@ -415,6 +415,8 @@ def env_step(action):
     
     done = False
     if not car.is_alive:
+        done = True
+    if car.goal_reached:
         done = True
     return_data = (car.get_data(), car.get_reward(), done,info)
     return return_data
