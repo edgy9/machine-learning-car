@@ -47,10 +47,10 @@ def draw(WINDOW, car):
 class Obstacle:
     def __init__(self):
         w, h = pygame.display.get_surface().get_size()
-        #self.obsticals = {1:[800,500,1200,800],2:[100,400,700,1000],3:[300,200,500,300]}
-        #self.obsticals_rect = {1:[300,200,200,100],2:[800,500,400,300],3:[100,400,600,600]}
-        self.obsticals = {}
-        self.obsticals_rect = {}
+        self.obsticals = {1:[800,500,1200,800],2:[100,400,700,1000],3:[300,200,500,300]}
+        self.obsticals_rect = {1:[300,200,200,100],2:[800,500,400,300],3:[100,400,600,600]}
+        #self.obsticals = {}
+        #self.obsticals_rect = {}
         self.border = [1,1,w-1,h-1]
         self.border_rect = [1,1,w-2,h-2]
         self.goal = [800,200,850,250]
@@ -59,9 +59,9 @@ class Obstacle:
     def draw(self,WINDOW):
         
         
-        #pygame.draw.rect(WINDOW,(0,0,255),(self.obsticals_rect[1]),3)
-        #pygame.draw.rect(WINDOW,(0,0,255),(self.obsticals_rect[2]),3)
-        #pygame.draw.rect(WINDOW,(0,0,255),(self.obsticals_rect[3]),3)
+        pygame.draw.rect(WINDOW,(0,0,255),(self.obsticals_rect[1]),3)
+        pygame.draw.rect(WINDOW,(0,0,255),(self.obsticals_rect[2]),3)
+        pygame.draw.rect(WINDOW,(0,0,255),(self.obsticals_rect[3]),3)
         pygame.draw.rect(WINDOW,(252, 186, 3),(self.goal_rect))
         pygame.draw.rect(WINDOW,(0,0,255),self.border,3)
         
@@ -309,15 +309,14 @@ class Car:
             for i, obsticals in obstacle.obsticals.items():
                 x_range = range(obsticals[0],obsticals[2])
                 y_range = range(obsticals[1],obsticals[3])
-                if int(points[0]) in x_range and int(points[1]) in y_range: 
+                if int(points[0]) in x_range and int(points[1]) in y_range:
                     print("collided")
                     self.is_alive = False
                     break
             x_range = range(obstacle.goal[0],obstacle.goal[2])
             y_range = range(obstacle.goal[1],obstacle.goal[3])
-            if int(points[0]) in x_range and int(points[1]) in y_range: 
+            if int(points[0]) in x_range and int(points[1]) in y_range:
                 print("goal reached")
-                #self.is_alive = False
                 self.goal_reached = True
                 break
             x_range = range(obstacle.border[0],obstacle.border[2])
@@ -347,17 +346,17 @@ class Car:
         if self.goal_reached: return 10000 #if goal reached big reward
         if self.is_alive == False: return 0
 
-        self.reward -= 1 # penalty for every step to reduce time
-        if self.pre_goal_dist > self.dist_goal: #if closer big reward
-            self.reward += 100
-        if self.pre_goal_dist <= self.dist_goal:   #if further negitive reward
-            self.reward -= 10
-        if (self.center_x,self.center_y) in self.pre_pos: 
-            self.reward -= 20
-        self.pre_goal_dist = self.dist_goal
-        self.pre_pos.append((self.center_x,self.center_y))
-        if int(self.goal_angle) == 0:
-            self.reward += 40
+        self.reward = 1 # penalty for every step to reduce time
+        #if self.pre_goal_dist > self.dist_goal: #if closer big reward
+        #    self.reward += 100
+        #if self.pre_goal_dist <= self.dist_goal:   #if further negitive reward
+        #    self.reward -= 10
+        #if (self.center_x,self.center_y) in self.pre_pos: 
+        #    self.reward -= 20
+        #self.pre_goal_dist = self.dist_goal
+        #self.pre_pos.append((self.center_x,self.center_y))
+        #if int(self.goal_angle) == 0:
+        #    self.reward += 40
         #print(self.angle,self.goal_angle)
         
         return self.reward
