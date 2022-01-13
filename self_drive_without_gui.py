@@ -23,10 +23,10 @@ def draw(car):
 class Obstacle:
     def __init__(self):
         w, h = WIDTH, HEIGHT
-        #self.obsticals = {1:[800,500,1200,800],2:[100,400,700,1000],3:[300,200,500,300]}
-        #self.obsticals_rect = {1:[300,200,200,100],2:[800,500,400,300],3:[100,400,600,600]}
-        self.obsticals = {}
-        self.obsticals_rect = {}
+        self.obsticals = {1:[800,500,1200,800],2:[100,400,700,1000],3:[300,200,500,300]}
+        self.obsticals_rect = {1:[300,200,200,100],2:[800,500,400,300],3:[100,400,600,600]}
+        #self.obsticals = {}
+        #self.obsticals_rect = {}
         self.border = [1,1,w-1,h-1]
         self.border_rect = [1,1,w-2,h-2]
         self.goal = [800,200,850,250]
@@ -308,22 +308,21 @@ class Car:
         return self.is_alive
     
     def get_reward(self):
-        self.reward = 1
         self.check_collision()
-        if self.goal_reached: self.is_alive = False; return 1000000 #if goal reached big reward
+        if self.goal_reached: self.is_alive = False; return 1000 #if goal reached big reward
         if self.is_alive == False: return 0
 
-        self.reward -= 0.1 # penalty for every step to reduce time
-        if self.pre_goal_dist > self.dist_goal: #if closer big reward
-            self.reward += 1
-        if self.pre_goal_dist <= self.dist_goal:   #if further negitive reward
-            self.reward -= 1
-        if (self.center_x,self.center_y) in self.pre_pos: 
-            self.reward -= 5
-        self.pre_goal_dist = self.dist_goal
-        self.pre_pos.append((self.center_x,self.center_y))
-        if self.angle == int(self.goal_angle):
-            self.reward += 2
+        self.reward = 1 # penalty for every step to reduce time
+        #if self.pre_goal_dist > self.dist_goal: #if closer big reward
+        #    self.reward += 1
+        #if self.pre_goal_dist <= self.dist_goal:   #if further negitive reward
+        #    self.reward -= 1
+        #if (self.center_x,self.center_y) in self.pre_pos: 
+        #    self.reward -= 5
+        #self.pre_goal_dist = self.dist_goal
+        #self.pre_pos.append((self.center_x,self.center_y))
+        #if self.angle == int(self.goal_angle):
+        #    self.reward += 2
         
         return self.reward
     
